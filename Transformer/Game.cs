@@ -57,11 +57,28 @@ namespace ConsoleMiniGame
         public string ChooseName(Heroes hero)
         {
             Console.WriteLine("Введите имя своего героя\n");
-            hero.Name = Console.ReadLine();
+            int i = 0;
+            while (true)
+            {
+                hero.Name = Console.ReadLine();
+                if (hero.Name == "" && i < 2)
+                {
+                    Console.WriteLine("Вы не ввели имя\nВведите имя");
+                    i++;
+                }
+                else if (hero.Name == "" && i >= 2)
+                {
+                    Console.WriteLine("Ты тупой? Введи имя!");
+                }
+                else
+                {
+                    break;
+                }
+            }
             return hero.Name;
-        }
+        } // Проверяем на условия и вводим имя героя
 
-        public void Initial(Heroes hero, Etity mob)
+        public void Initial(Heroes hero, Entity mob)
         {
             Console.Clear();
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов молнией {3}", hero.Name, hero.Health, hero.Flask, hero.Lightnings);
@@ -69,7 +86,7 @@ namespace ConsoleMiniGame
             Actions.Action();
         } //Выводим статы персонажей 
 
-        public void Fight(Heroes hero, Etity mob) // Персонажи бьют друг друга, проверется необходимость использовать действия
+        public void Fight(Heroes hero, Entity mob) // Персонажи бьют друг друга, проверется необходимость использовать действия
         {
             Console.Clear();
             hero.Health -= mob.Damage;
@@ -87,7 +104,7 @@ namespace ConsoleMiniGame
 
         }
 
-        public void Stats(Heroes hero, Etity mob)
+        public void Stats(Heroes hero, Entity mob)
         {
             Console.Clear();
             Console.WriteLine("Конец раунда!");
@@ -95,7 +112,7 @@ namespace ConsoleMiniGame
             Console.WriteLine("Враг {0}, Здоровье {1}. Нанес урона {2} \n", mob.Name, mob.Health, mob.Damage);
         } // Показываем статы после раунда
 
-        public void Choose(Heroes hero, Etity mob)
+        public void Choose(Heroes hero, Entity mob)
         {
             Console.WriteLine(@"Для использования зелья лечения нажмите 'B'
 Для усиления следующего удара молнией нажмите 'F'
@@ -111,7 +128,7 @@ namespace ConsoleMiniGame
             }
         } //Воможность выбрать какое-либо действие
 
-        public void Final(Heroes hero, Etity mob, int i)
+        public void Final(Heroes hero, Entity mob, int i)
         {
             if (mob.Health <= 0 && hero.Health > 0)
             {

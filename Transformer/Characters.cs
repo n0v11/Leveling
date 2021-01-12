@@ -6,39 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleMiniGame
 {
-    class Etity
+    class Entity
     {
         private string name;
-        public string Name
-        {
-            set
-            {
-                int i = 0;
-                while (true)
-                {
-                    if (value == "" && i < 2)
-                    {
-                        Console.WriteLine("Вы не ввели имя\nВведите имя");
-                        value = Console.ReadLine();
-                        i++;
-                    }
-                    else if (value == "" && i >= 2)
-                    {
-                        Console.WriteLine("Ты тупой? Введи имя!");
-                        value = Console.ReadLine();
-                    }
-                    else
-                    {
-                        name = value;
-                        break;
-                    }
-                }
-            }
-            get
-            {
-                return name;
-            }
-        }
+        public string Name { get; set; }
         private int health;
         public int Health
         {
@@ -61,7 +32,7 @@ namespace ConsoleMiniGame
         public int Damage;
     }
 
-    class Heroes : Etity
+    class Heroes : Entity
     {
         public int Flask;
         public int Lightnings;
@@ -74,7 +45,7 @@ namespace ConsoleMiniGame
                 Flask -= 1;
                 Health += 50;
                 Console.Clear();
-                Console.WriteLine("Здоровье увеличилось на 50. Текущее количество здоровья {0}", hero.Health);
+                Console.WriteLine("Здоровье увеличилось на 50. Текущее количество здоровья {0}", Health);
                 Actions.Action();
             }
             else
@@ -85,7 +56,7 @@ namespace ConsoleMiniGame
             }
         }
 
-        public void LightningShot(Heroes hero, Etity mob)
+        public void LightningShot(Heroes hero, Entity mob)
         {
             if (hero.Lightnings > 0)
             {
@@ -120,7 +91,7 @@ namespace ConsoleMiniGame
         public Mage() { HeroClass = "Mage"; Health = 100; Damage = Rand.damage(10, 20); Flask = 1; Lightnings = 5; }
     }
 
-    class Mobs : Etity { }
+    class Mobs : Entity { }
 
     class Enemy1 : Mobs
     {

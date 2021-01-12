@@ -11,7 +11,7 @@ namespace ConsoleMiniGame
         static void Main(string[] args)
         {
             var Heroes = HeroArray();
-            var Enemy = MobsArray();
+            var Enemy = EnemyArray();
 
             Actions game = new Actions();
 
@@ -40,7 +40,7 @@ namespace ConsoleMiniGame
             Hero[2] = new Mage();
             return Hero;
         }
-        private static Mobs[] MobsArray()
+        private static Mobs[] EnemyArray()
         {
             Mobs[] Enemy = new Mobs[3];
             Enemy[0] = new Enemy1();
@@ -50,3 +50,7 @@ namespace ConsoleMiniGame
         }
     }
 }
+// To Do: настроить баланс мобам
+//Добавить босса
+//Генерировать мобов для интереса
+//Сделать ng+ с переносом предметов
