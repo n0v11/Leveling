@@ -14,14 +14,14 @@ namespace ConsoleMiniGame
             Actions game = new Actions();
             Entity entity = new Entity();
             Hero hero = Heroes[game.ChooseHero(Heroes)]; // Выбор класса игрока
-            Entity[] enemy = EnemyArray(Others(hero, Heroes)); // Создание предателя и добавление его как финального босса к мобам
+            Entity[] Enemies = EnemyArray(Others(hero, Heroes)); // Создание предателя и добавление его как финального босса к мобам
 
             game.ChooseName(hero); // Выбор имени игрока
 
-            for (int i = 0; i < enemy.Length; i++)
+            for (int i = 0; i < Enemies.Length; i++)
             {
-                Entity enemy = enemy[i]; // Запуск мобов по кругу
-                game.Initial(hero, enemy); // Вывод статов персонажей
+                Entity enemy = Enemies[i]; // Запуск мобов по кругу
+                game.Initial(hero, enemy); // Вывод статов персонажей 
                 while (hero.Health > 0 && enemy.Health > 0)
                 {
                     game.Fight(hero, enemy); // Этап раунда
@@ -29,30 +29,32 @@ namespace ConsoleMiniGame
                     Console.WriteLine("Конец раунда!");
                     hero.Stats(); // Вывод статов героя после раунда
                     enemy.Stats(); // Вывод статов моба после раунда
-
-                    Actions.Action();
+                    if (i == Enemies.Length - 1) // Если враг - босс
+                    {
+                        game.EnemyAi(enemy);
+                    }
                     game.Choose(hero, enemy); //Воможность выбора какого-либо действия
                 }
-                game.Final(hero, enemy, enemy.Length, i); //Вывод результата боя
+                game.Final(hero, enemy, Enemies.Length, i); //Вывод результата боя
             }
         }
 
         private static Hero[] HeroArray()
         {
-            Hero[] heroes = new Hero[3];
-            heroes[0] = new Warrior();
-            heroes[1] = new Rogue();
-            heroes[2] = new Mage();
-            return heroes;
+            Hero[] Hero = new Hero[3];
+            Hero[0] = new Warrior();
+            Hero[1] = new Rogue();
+            Hero[2] = new Mage();
+            return Hero;
         } // Массив героев
         private static Entity[] EnemyArray(Hero traitor)
         {
-            Entity[] enemies = new Entity[4];
-            enemies[0] = new Enemy1();
-            enemies[1] = new Enemy2();
-            enemies[2] = new Enemy3();
-            enemies[3] = traitor;
-            return enemies;
+            Entity[] Enemy = new Entity[4];
+            Enemy[0] = new Enemy1();
+            Enemy[1] = new Enemy2();
+            Enemy[2] = new Enemy3();
+            Enemy[3] = traitor;
+            return Enemy;
         } // Массив мобов
         private static Hero Others(Hero hero, Hero[] all)
         {

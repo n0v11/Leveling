@@ -48,12 +48,12 @@ namespace ConsoleMiniGame
             while (true)
             {
                 hero.Name = Console.ReadLine();
-                if (hero.Name == "" && i < 2)
+                if (hero.Name == "" && i < 2 || hero.Name == hero.HeroClass)
                 {
-                    Console.WriteLine("Вы не ввели имя\nВведите имя");
+                    Console.WriteLine("Вы не ввели имя или ввели неправильное имя\nВведите имя");
                     i++;
                 }
-                else if (hero.Name == "" && i >= 2)
+                else if (hero.Name == "" && i >= 2 && hero.Name == hero.HeroClass)
                 {
                     Console.WriteLine("Ты тупой? Введи имя!");
                 }
@@ -71,7 +71,7 @@ namespace ConsoleMiniGame
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов молнией {3}", hero.Name, hero.Health, hero.Flask, hero.Lightnings);
             Console.WriteLine("Враг {0}, Здоровье {1}.", mob.Name, mob.Health);
             Actions.Action();
-        } // Вывод статов персонажей
+        } // Вывод статов персонажей 
 
         public void Fight(Hero hero, Entity mob) // Бой, проверерка необходимости использования действий
         {
@@ -80,8 +80,6 @@ namespace ConsoleMiniGame
             mob.Damage = Rand.damage(mob.DamageA, mob.DamageB);
             hero.Health -= mob.Damage;
             mob.Health -= hero.Damage;
-        }
-
         }
 
         public void Choose(Hero hero, Entity mob)
@@ -133,5 +131,19 @@ namespace ConsoleMiniGame
             Console.WriteLine("Для продолжения нажмите любую клавишу");
             Console.ReadKey();
         } // Разграничитель шагов
+
+        public void EnemyAi(Entity enemy)
+        {
+            int chance = Rand.damage(0, 10);
+            if (enemy.Health <= 70 && enemy.Health > 30 && chance < 3
+                ||
+                enemy.Health <= 30 && enemy.Health > 10 && chance < 7
+                ||
+                enemy.Health <= 10 && enemy.Health > 0)
+            {
+                enemy.Heal();
+            }
+            else { }
+        }
     }
 }
