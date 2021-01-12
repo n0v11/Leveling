@@ -31,11 +31,9 @@ namespace ConsoleMiniGame
         public int Damage;
 
         public virtual void Stats()
-        {
-            Console.Clear();
-            Console.WriteLine("Конец раунда!");
-            Console.WriteLine("Враг {0}, Здоровье {1}, Нанес урона {2} {3} {4}", Name, Health, Damage);
-        } // Показываем статы после раунда 
+        { } // Вывод статы после раунда 
+
+        public virtual void Heal() { }
     }
 
     class Hero : Entity
@@ -44,22 +42,27 @@ namespace ConsoleMiniGame
         public int Flask;
         public int Lightnings;
 
-        public void Heal(Hero hero)
-        {
-            if (Flask > 0)
+        public override void Heal()
+        {            
+            if ((Name != "Warrior" || Name != "Rogue" || Name != "Mage") && Flask < 1)
             {
-                Flask -= 1;
-                Health += 50;
-                Console.Clear();
-                Console.WriteLine("Здоровье увеличилось на 50. Текущее количество здоровья {0}", Health);
-                Actions.Action();
+                    //Console.Clear();
+                    Console.WriteLine("\nЗелий больше нет!");
+                    Actions.Action();          
             }
             else
             {
-                Console.Clear();
-                Console.WriteLine("Зелий больше нет!");
-                Actions.Action();
+                if (Flask > 0)
+                {
+                    Flask -= 1;
+                    Health += 50;
+                    //Console.Clear();
+                    Console.WriteLine("\nЗдоровье {0} увеличилось на 50. Текущее количество здоровья {1}", Name, Health);
+                    Actions.Action();
+                }
+                else { }
             }
+
         }
 
         public void LightningShot(Hero hero, Entity mob)
@@ -83,15 +86,13 @@ namespace ConsoleMiniGame
 
         public override void Stats()
         {
-            Console.Clear();
-            Console.WriteLine("Конец раунда!");
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов Молнией {4}. Нанес урона {3}", Name, Health, Flask, Damage, Lightnings);
-        } // Показываем статы после раунда 
+        } // Вывод статов после раунда 
     }
 
     class Warrior : Hero
     {
-        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; Damage = Rand.damage(20, 40); Flask = 2; Lightnings = 2; }
+        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; Damage = Rand.damage(20, 40); Flask = 3; Lightnings = 2; }
     }
 
     class Rogue : Hero
@@ -106,12 +107,10 @@ namespace ConsoleMiniGame
 
     class Mob : Entity
     {
-        /* public override void Stats()
+         public override void Stats()
          {
-             Console.Clear();
-             Console.WriteLine("Конец раунда!");
              Console.WriteLine("Враг {0}, Здоровье {1}, Нанес урона {2}", Name, Health, Damage);
-         } // Показываем статы после раунда  */
+         } // Вывод статов после раунда  
     }
 
     class Enemy1 : Mob

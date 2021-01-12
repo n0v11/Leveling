@@ -11,26 +11,31 @@ namespace ConsoleMiniGame
         static void Main(string[] args)
         {
             Hero[] Heroes = HeroArray();
-
             Actions game = new Actions();
             Entity entity = new Entity();
+            Hero hero = Heroes[game.ChooseHero(Heroes)]; // Выбор класса игрока
+            Entity[] Enemy = EnemyArray(Others(hero, Heroes)); // Создание предателя и добавление его как финального босса к мобам
 
-            Hero hero = Heroes[game.ChooseHero(Heroes)]; // Выбираем класс игрока
-            Entity[] enemy = EnemyArray(Others(hero, Heroes)); // Создаем предателя и добавляем его как финального босса к мобам
-            game.ChooseName(hero); // Выбираем имя игрока
+            game.ChooseName(hero); // Выбор имени игрока
 
-            for (int i = 0; i < enemy.Length; i++)
+            for (int i = 0; i < Enemy.Length; i++)
             {
-                Entity mob = enemy[i]; // Пускаем мобов по кругу
-                game.Initial(hero, mob); //Выводим статы персонажей 
-                while (hero.Health > 0 && mob.Health > 0)
+                Entity enemy = Enemy[i]; // Запуск мобов по кругу
+                game.Initial(hero, enemy); // Вывод статов персонажей 
+                while (hero.Health > 0 && enemy.Health > 0)
                 {
-                    game.Fight(hero, mob); // Этап раунда
-                    hero.Stats(); // Показываем статы после раунда
-                    entity.Stats();
-                    game.Choose(hero, mob); //Воможность выбрать какое-либо действие
+                    game.Fight(hero, enemy); // Этап раунда
+                    Console.Clear();
+                    Console.WriteLine("Конец раунда!");
+                    hero.Stats(); // Вывод статов героя после раунда
+                    enemy.Stats(); // Вывод статов моба после раунда
+                    if (i == Enemy.Length - 1)
+                    {
+                        game.EnemyAi(enemy);
+                    }
+                    game.Choose(hero, enemy); //Воможность выбора какого-либо действия
                 }
-                game.Final(hero, mob, enemy.Length, i); //Выводим результат боя
+                game.Final(hero, enemy, Enemy.Length, i); //Вывод результата боя
             }
         }
 
@@ -65,7 +70,7 @@ namespace ConsoleMiniGame
             }
             Hero traitor = others[Rand.damage(0, count)];
             return traitor;
-        } // Создаем предателя и добавляем его как финального босса к мобам
+        } // Создание предателя и добавление его как финального босса к мобам
     }
 }
 // To Do: настроить баланс мобам
