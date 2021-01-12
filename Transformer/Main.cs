@@ -10,47 +10,65 @@ namespace ConsoleMiniGame
     {
         static void Main(string[] args)
         {
-            var Heroes = HeroArray();
-            var Enemy = EnemyArray();
+            Hero[] Heroes = HeroArray();
 
             Actions game = new Actions();
+            Entity entity = new Entity();
 
-            var hero = Heroes[game.ChooseHero(Heroes)]; // Выбираем класс игрока
+            Hero hero = Heroes[game.ChooseHero(Heroes)]; // Выбираем класс игрока
+            Entity[] enemy = EnemyArray(Others(hero, Heroes)); // Создаем предателя и добавляем его как финального босса к мобам
             game.ChooseName(hero); // Выбираем имя игрока
 
-            for (int i = 0; i < Enemy.Length; i++)
+            for (int i = 0; i < enemy.Length; i++)
             {
-                var mob = Enemy[i]; // Пускаем мобов по кругу
+                Entity mob = enemy[i]; // Пускаем мобов по кругу
                 game.Initial(hero, mob); //Выводим статы персонажей 
                 while (hero.Health > 0 && mob.Health > 0)
                 {
                     game.Fight(hero, mob); // Этап раунда
-                    game.Stats(hero, mob); // Показываем статы после раунда
+                    hero.Stats(); // Показываем статы после раунда
+                    entity.Stats();
                     game.Choose(hero, mob); //Воможность выбрать какое-либо действие
                 }
-                game.Final(hero, mob, i); //Выводим результат боя
+                game.Final(hero, mob, enemy.Length, i); //Выводим результат боя
             }
         }
 
-        private static Heroes[] HeroArray()
+        private static Hero[] HeroArray()
         {
-            Heroes[] Hero = new Heroes[3];
+            Hero[] Hero = new Hero[3];
             Hero[0] = new Warrior();
             Hero[1] = new Rogue();
             Hero[2] = new Mage();
             return Hero;
-        }
-        private static Mobs[] EnemyArray()
+        } // Массив героев
+        private static Entity[] EnemyArray(Hero traitor)
         {
-            Mobs[] Enemy = new Mobs[3];
+            Entity[] Enemy = new Entity[4];
             Enemy[0] = new Enemy1();
             Enemy[1] = new Enemy2();
             Enemy[2] = new Enemy3();
+            Enemy[3] = traitor;
             return Enemy;
-        }
+        } // Массив мобов
+        private static Hero Others(Hero hero, Hero[] all)
+        {
+            Hero[] others = new Hero[2];
+            int count = 0;
+            for (int i = 0; i < all.Length; i++)
+            {
+                if (all[i].HeroClass != hero.HeroClass)
+                {
+                    others[count] = all[i];
+                    count++;
+                }
+            }
+            Hero traitor = others[Rand.damage(0, count)];
+            return traitor;
+        } // Создаем предателя и добавляем его как финального босса к мобам
     }
 }
 // To Do: настроить баланс мобам
-//Добавить босса
+//Добавить босса +
 //Генерировать мобов для интереса
 //Сделать ng+ с переносом предметов

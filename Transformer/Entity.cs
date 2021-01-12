@@ -8,7 +8,6 @@ namespace ConsoleMiniGame
 {
     class Entity
     {
-        private string name;
         public string Name { get; set; }
         private int health;
         public int Health
@@ -30,15 +29,22 @@ namespace ConsoleMiniGame
             }
         }
         public int Damage;
+
+        public virtual void Stats()
+        {
+            Console.Clear();
+            Console.WriteLine("Конец раунда!");
+            Console.WriteLine("Враг {0}, Здоровье {1}, Нанес урона {2} {3} {4}", Name, Health, Damage);
+        } // Показываем статы после раунда 
     }
 
-    class Heroes : Entity
+    class Hero : Entity
     {
+        public string HeroClass;
         public int Flask;
         public int Lightnings;
-        public string HeroClass;
 
-        public void Heal(Heroes hero)
+        public void Heal(Hero hero)
         {
             if (Flask > 0)
             {
@@ -56,7 +62,7 @@ namespace ConsoleMiniGame
             }
         }
 
-        public void LightningShot(Heroes hero, Entity mob)
+        public void LightningShot(Hero hero, Entity mob)
         {
             if (hero.Lightnings > 0)
             {
@@ -74,36 +80,51 @@ namespace ConsoleMiniGame
                 Actions.Action();
             }
         }
+
+        public override void Stats()
+        {
+            Console.Clear();
+            Console.WriteLine("Конец раунда!");
+            Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов Молнией {4}. Нанес урона {3}", Name, Health, Flask, Damage, Lightnings);
+        } // Показываем статы после раунда 
     }
 
-    class Warrior : Heroes
+    class Warrior : Hero
     {
-        public Warrior() { HeroClass = "Warrior"; Health = 140; Damage = Rand.damage(15, 30); Flask = 1; Lightnings = 2; }
+        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; Damage = Rand.damage(20, 40); Flask = 2; Lightnings = 2; }
     }
 
-    class Rogue : Heroes
+    class Rogue : Hero
     {
-        public Rogue() { HeroClass = "Rogue"; Health = 115; Damage = Rand.damage(20, 35); Flask = 2; Lightnings = 1; }
+        public Rogue() { Name = "Rogue"; HeroClass = "Rogue"; Health = 115; Damage = Rand.damage(20, 35); Flask = 2; Lightnings = 1; }
     }
 
-    class Mage : Heroes
+    class Mage : Hero
     {
-        public Mage() { HeroClass = "Mage"; Health = 100; Damage = Rand.damage(10, 20); Flask = 1; Lightnings = 5; }
+        public Mage() { Name = "Mage"; HeroClass = "Mage"; Health = 100; Damage = Rand.damage(10, 20); Flask = 1; Lightnings = 5; }
     }
 
-    class Mobs : Entity { }
+    class Mob : Entity
+    {
+        /* public override void Stats()
+         {
+             Console.Clear();
+             Console.WriteLine("Конец раунда!");
+             Console.WriteLine("Враг {0}, Здоровье {1}, Нанес урона {2}", Name, Health, Damage);
+         } // Показываем статы после раунда  */
+    }
 
-    class Enemy1 : Mobs
+    class Enemy1 : Mob
     {
         public Enemy1() { Name = "Пуська"; Health = 30; Damage = Rand.damage(5, 15); }
     }
 
-    class Enemy2 : Mobs
+    class Enemy2 : Mob
     {
         public Enemy2() { Name = "Сруська"; Health = 60; Damage = Rand.damage(10, 20); }
     }
 
-    class Enemy3 : Mobs
+    class Enemy3 : Mob
     {
         public Enemy3() : base()
         {

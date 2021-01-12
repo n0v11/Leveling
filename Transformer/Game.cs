@@ -11,7 +11,7 @@ namespace ConsoleMiniGame
         private bool LightningChoosed = false; // Проверяем выбор действия "Удар молнии"
         private bool HealChoosed = false; // Проверяем выбор действия "Использование Зелья"
 
-        public int ChooseHero(Heroes[] heroes)
+        public int ChooseHero(Hero[] heroes)
         {
             Console.WriteLine("Выберите класс своего персонажа\n");
             for (int i = 0; i < heroes.Length; i++)
@@ -54,7 +54,7 @@ namespace ConsoleMiniGame
             return Res;
         } // Проверяем ввод выбора героя
 
-        public string ChooseName(Heroes hero)
+        public string ChooseName(Hero hero)
         {
             Console.WriteLine("Введите имя своего героя\n");
             int i = 0;
@@ -78,7 +78,7 @@ namespace ConsoleMiniGame
             return hero.Name;
         } // Проверяем на условия и вводим имя героя
 
-        public void Initial(Heroes hero, Entity mob)
+        public void Initial(Hero hero, Entity mob)
         {
             Console.Clear();
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов молнией {3}", hero.Name, hero.Health, hero.Flask, hero.Lightnings);
@@ -86,7 +86,7 @@ namespace ConsoleMiniGame
             Actions.Action();
         } //Выводим статы персонажей 
 
-        public void Fight(Heroes hero, Entity mob) // Персонажи бьют друг друга, проверется необходимость использовать действия
+        public void Fight(Hero hero, Entity mob) // Персонажи бьют друг друга, проверется необходимость использовать действия
         {
             Console.Clear();
             hero.Health -= mob.Damage;
@@ -104,15 +104,15 @@ namespace ConsoleMiniGame
 
         }
 
-        public void Stats(Heroes hero, Entity mob)
+        /*public void Stats(Hero hero, Entity mob)
         {
             Console.Clear();
             Console.WriteLine("Конец раунда!");
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов Молнией {4}. Нанес урона {3}", hero.Name, hero.Health, hero.Flask, hero.Damage, hero.Lightnings);
-            Console.WriteLine("Враг {0}, Здоровье {1}. Нанес урона {2} \n", mob.Name, mob.Health, mob.Damage);
-        } // Показываем статы после раунда
+            Console.WriteLine("Враг {0}, Здоровье {1}, Зелий лечения {2}", mob.Name, mob.Health, mob.Damage);
+        } // Показываем статы после раунда */
 
-        public void Choose(Heroes hero, Entity mob)
+        public void Choose(Hero hero, Entity mob)
         {
             Console.WriteLine(@"Для использования зелья лечения нажмите 'B'
 Для усиления следующего удара молнией нажмите 'F'
@@ -128,13 +128,13 @@ namespace ConsoleMiniGame
             }
         } //Воможность выбрать какое-либо действие
 
-        public void Final(Heroes hero, Entity mob, int i)
+        public void Final(Hero hero, Entity mob, int lenght, int i)
         {
             if (mob.Health <= 0 && hero.Health > 0)
             {
                 Console.WriteLine("\nВ {0} раунде победил {1}", i + 1, hero.Name);
                 Console.ReadKey();
-                if (i == 2)
+                if (i == lenght - 1)
                 {
                     Console.WriteLine("Ты победил. Могу перевести тебе монетку");
                     Console.ReadKey();
