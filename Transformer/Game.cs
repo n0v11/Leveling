@@ -8,38 +8,50 @@ namespace ConsoleMiniGame
 {
     class Actions
     {
+        private bool LightningChoosed = false; // Проверка выбор действия "Удар молнии"
+        private bool HealChoosed = false; // Проверка выбор действия "Использование Зелья"
+
         public int ChooseHero(Hero[] heroes)
         {
             Console.WriteLine("Выберите класс своего персонажа\n");
             for (int i = 0; i < heroes.Length; i++)
             {
-                heroes[i].Damage = Rand.damage(heroes[i].DamageA, heroes[i].DamageB);
+                //Console.Clear();
                 Console.WriteLine(i + 1 + ": Класс {0} - Здоровье: {1}, Атака: {2}, Зелий лечения: {3}, Усилений {4}\n", heroes[i].HeroClass, heroes[i].Health, heroes[i].Damage, heroes[i].Flask, heroes[i].Lightnings);
             }
-            int Choose = CheckHeroNumber(heroes);
+            int Choose = CheckHeroNumber();
             Console.Clear();
             Console.WriteLine("Вы выбрали {0}\n", heroes[Choose].HeroClass);
             return Choose;
         } // Выбор класс игрока
 
-        private int CheckHeroNumber(Hero[] heroes)
+        private int CheckHeroNumber()
         {
             string Choose;
+            int Res;
             while (true)
             {
                 Choose = Console.ReadLine();
-                for (int i = 0; i < heroes.Length; i++)
+                if (Choose.Length > 0)
                 {
-                    string m = Convert.ToString(i + 1);
-                    if (Choose == m)
+                    if (Choose[0] == '1' || Choose[0] == '2' || Choose[0] == '3')
                     {
-                        int Result = Convert.ToInt32(Choose) - 1;
-                        return Result;
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
                     }
                 }
-                Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
-            } // Проверка ввода выбора героя
-        }
+                else
+                {
+                    Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
+                }
+            }
+            Res = Convert.ToInt32(Choose);
+            Res--;
+            return Res;
+        } // Проверка ввода выбора героя
 
         public string ChooseName(Hero hero)
         {
@@ -71,30 +83,38 @@ namespace ConsoleMiniGame
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов молнией {3}", hero.Name, hero.Health, hero.Flask, hero.Lightnings);
             Console.WriteLine("Враг {0}, Здоровье {1}.", mob.Name, mob.Health);
             Actions.Action();
-        } // Вывод статов персонажей 
+        } // Вывод статов персонажей
 
         public void Fight(Hero hero, Entity mob) // Бой, проверерка необходимости использования действий
         {
-            //Console.Clear();
-            hero.Damage = Rand.damage(hero.DamageA, hero.DamageB);
-            mob.Damage = Rand.damage(mob.DamageA, mob.DamageB);
             hero.Health -= mob.Damage;
             mob.Health -= hero.Damage;
+            if (HealChoosed == true)
+            {
+                hero.Heal();
+                HealChoosed = false;
+            }
+            if (LightningChoosed == true)
+            {
+                hero.LightningShot(hero, mob);
+                LightningChoosed = false;
+            }
+
+            mob.AiAction(hero);
         }
 
         public void Choose(Hero hero, Entity mob)
         {
-            Console.WriteLine("\nДля использования зелья лечения нажмите 'B'\nДля удара врага молнией нажмите 'F'\nДля продолжения нажмите любую другую клавишу");
+            Console.WriteLine("\nДля использования зелья лечения нажмите 'B'\nДля усиления следующего удара молнией нажмите 'F'\nДля продолжения нажмите любую другую клавишу");
             string key = Console.ReadLine(); // Ждем нажатия клавишы действия
             if (key == "B")
             {
-                hero.Heal();
+                HealChoosed = true;
             }
             if (key == "F")
             {
-                hero.LightningShot(hero, mob);
+                LightningChoosed = true;
             }
-
         } // Воможность выбрать какое-либо действие
 
         public void Final(Hero hero, Entity mob, int lenght, int i)
@@ -131,29 +151,5 @@ namespace ConsoleMiniGame
             Console.WriteLine("Для продолжения нажмите любую клавишу");
             Console.ReadKey();
         } // Разграничитель шагов
-
-        public void EnemyAi(Entity enemy)
-        {
-            int chance = Rand.damage(0, 10);
-            if (enemy.Health <= 70 && enemy.Health > 30)
-            {
-                if (chance < 3)
-                {
-                    enemy.Heal();
-                }
-            }
-            else if (enemy.Health <= 30 && enemy.Health > 10)
-            {
-                if (chance < 7)
-                {
-                    enemy.Heal();
-                }
-            }
-            else if (enemy.Health <= 10 && enemy.Health > 0)
-            {
-                enemy.Heal();
-            }
-            else { }
-        }
     }
 }
