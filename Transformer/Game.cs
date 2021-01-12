@@ -83,11 +83,10 @@ namespace ConsoleMiniGame
             Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов молнией {3}", hero.Name, hero.Health, hero.Flask, hero.Lightnings);
             Console.WriteLine("Враг {0}, Здоровье {1}.", mob.Name, mob.Health);
             Actions.Action();
-        } // Вывод статов персонажей 
+        } // Вывод статов персонажей
 
         public void Fight(Hero hero, Entity mob) // Бой, проверерка необходимости использования действий
         {
-            //Console.Clear();
             hero.Health -= mob.Damage;
             mob.Health -= hero.Damage;
             if (HealChoosed == true)
@@ -101,6 +100,7 @@ namespace ConsoleMiniGame
                 LightningChoosed = false;
             }
 
+            mob.AiAction(hero);
         }
 
         public void Choose(Hero hero, Entity mob)
@@ -151,29 +151,5 @@ namespace ConsoleMiniGame
             Console.WriteLine("Для продолжения нажмите любую клавишу");
             Console.ReadKey();
         } // Разграничитель шагов
-
-        public void EnemyAi(Entity enemy)
-        {
-            int chance = Rand.damage(0, 10);
-            if (enemy.Health <= 70 && enemy.Health > 30)
-            {
-                if (chance < 3)
-                {
-                    enemy.Heal();
-                }
-            }
-            else if (enemy.Health <= 30 && enemy.Health > 10)
-            {
-                if (chance < 7)
-                {
-                    enemy.Heal();
-                }
-            }
-            else if (enemy.Health <= 10 && enemy.Health > 0)
-            {
-                enemy.Heal();
-            }
-            else { }
-        }
     }
 }
