@@ -28,7 +28,9 @@ namespace ConsoleMiniGame
                 return health;
             }
         }
-        public int Damage;
+        public int DamageA;
+        public int DamageB;
+        public int Damage = 0;
 
         public virtual void Stats()
         { } // Вывод статы после раунда 
@@ -46,7 +48,6 @@ namespace ConsoleMiniGame
         {            
             if ((Name != "Warrior" || Name != "Rogue" || Name != "Mage") && Flask < 1)
             {
-                    //Console.Clear();
                     Console.WriteLine("\nЗелий больше нет!");
                     Actions.Action();          
             }
@@ -56,8 +57,7 @@ namespace ConsoleMiniGame
                 {
                     Flask -= 1;
                     Health += 50;
-                    //Console.Clear();
-                    Console.WriteLine("\nЗдоровье {0} увеличилось на 50. Текущее количество здоровья {1}", Name, Health);
+                    Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", Name, Health);
                     Actions.Action();
                 }
                 else { }
@@ -72,13 +72,11 @@ namespace ConsoleMiniGame
                 int damage = Rand.damage(10, 20);
                 mob.Health -= damage;
                 hero.Lightnings--;
-                Console.Clear();
                 Console.WriteLine("Здоровье {0} уменьшилось на {1}. Текущее количество здоровья {0} {2}", mob.Name, damage, mob.Health);
                 Actions.Action();
             }
             else
             {
-                Console.Clear();
                 Console.WriteLine("Молний больше нет!");
                 Actions.Action();
             }
@@ -92,17 +90,17 @@ namespace ConsoleMiniGame
 
     class Warrior : Hero
     {
-        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; Damage = Rand.damage(20, 40); Flask = 3; Lightnings = 2; }
+        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; DamageA = 20; DamageB = 40; Flask = 3; Lightnings = 2; }
     }
 
     class Rogue : Hero
     {
-        public Rogue() { Name = "Rogue"; HeroClass = "Rogue"; Health = 115; Damage = Rand.damage(20, 35); Flask = 2; Lightnings = 1; }
+        public Rogue() { Name = "Rogue"; HeroClass = "Rogue"; Health = 115; DamageA = 20; DamageB = 35; Flask = 2; Lightnings = 1; }
     }
 
     class Mage : Hero
     {
-        public Mage() { Name = "Mage"; HeroClass = "Mage"; Health = 100; Damage = Rand.damage(10, 20); Flask = 1; Lightnings = 5; }
+        public Mage() { Name = "Mage"; HeroClass = "Mage"; Health = 100; DamageA = 10; DamageB = 20; Flask = 1; Lightnings = 5; }
     }
 
     class Mob : Entity
@@ -115,12 +113,12 @@ namespace ConsoleMiniGame
 
     class Enemy1 : Mob
     {
-        public Enemy1() { Name = "Пуська"; Health = 30; Damage = Rand.damage(5, 15); }
+        public Enemy1() { Name = "Пуська"; Health = 60; DamageA = 5; DamageB = 10; }
     }
 
     class Enemy2 : Mob
     {
-        public Enemy2() { Name = "Сруська"; Health = 60; Damage = Rand.damage(10, 20); }
+        public Enemy2() { Name = "Сруська"; Health = 100; DamageA = 10; DamageB = 15; }
     }
 
     class Enemy3 : Mob
@@ -128,8 +126,9 @@ namespace ConsoleMiniGame
         public Enemy3() : base()
         {
             Name = "Финалька";
-            Health = 80;
-            Damage = Rand.damage(15, 20);
+            Health = 100;
+            DamageA = 10;
+            DamageB = 20;
         }
     }
 }

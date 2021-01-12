@@ -8,50 +8,38 @@ namespace ConsoleMiniGame
 {
     class Actions
     {
-        private bool LightningChoosed = false; // Проверка выбор действия "Удар молнии"
-        private bool HealChoosed = false; // Проверка выбор действия "Использование Зелья"
-
         public int ChooseHero(Hero[] heroes)
         {
             Console.WriteLine("Выберите класс своего персонажа\n");
             for (int i = 0; i < heroes.Length; i++)
             {
-                //Console.Clear();
+                heroes[i].Damage = Rand.damage(heroes[i].DamageA, heroes[i].DamageB);
                 Console.WriteLine(i + 1 + ": Класс {0} - Здоровье: {1}, Атака: {2}, Зелий лечения: {3}, Усилений {4}\n", heroes[i].HeroClass, heroes[i].Health, heroes[i].Damage, heroes[i].Flask, heroes[i].Lightnings);
             }
-            int Choose = CheckHeroNumber();
+            int Choose = CheckHeroNumber(heroes);
             Console.Clear();
             Console.WriteLine("Вы выбрали {0}\n", heroes[Choose].HeroClass);
             return Choose;
         } // Выбор класс игрока
 
-        private int CheckHeroNumber()
+        private int CheckHeroNumber(Hero[] heroes)
         {
             string Choose;
-            int Res;
             while (true)
             {
                 Choose = Console.ReadLine();
-                if (Choose.Length > 0)
+                for (int i = 0; i < heroes.Length; i++)
                 {
-                    if (Choose[0] == '1' || Choose[0] == '2' || Choose[0] == '3')
+                    string m = Convert.ToString(i + 1);
+                    if (Choose == m)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
+                        int Result = Convert.ToInt32(Choose) - 1;
+                        return Result;
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
-                }
-            }
-            Res = Convert.ToInt32(Choose);
-            Res--;
-            return Res;
-        } // Проверка ввода выбора героя
+                Console.WriteLine("Вы неверно выбрали класс персонажа. Попробуйте еще раз");
+            } // Проверка ввода выбора героя
+        }
 
         public string ChooseName(Hero hero)
         {
@@ -88,33 +76,25 @@ namespace ConsoleMiniGame
         public void Fight(Hero hero, Entity mob) // Бой, проверерка необходимости использования действий
         {
             //Console.Clear();
+            hero.Damage = Rand.damage(hero.DamageA, hero.DamageB);
+            mob.Damage = Rand.damage(mob.DamageA, mob.DamageB);
             hero.Health -= mob.Damage;
             mob.Health -= hero.Damage;
-            if (HealChoosed == true)
-            {
-                hero.Heal();
-                HealChoosed = false;
-            }
-            if (LightningChoosed == true)
-            {
-                hero.LightningShot(hero, mob);
-                LightningChoosed = false;
-            }
-
         }
 
         public void Choose(Hero hero, Entity mob)
         {
-            Console.WriteLine("\nДля использования зелья лечения нажмите 'B'\nДля усиления следующего удара молнией нажмите 'F'\nДля продолжения нажмите любую другую клавишу");
+            Console.WriteLine("\nДля использования зелья лечения нажмите 'B'\nДля удара врага молнией нажмите 'F'\nДля продолжения нажмите любую другую клавишу");
             string key = Console.ReadLine(); // Ждем нажатия клавишы действия
             if (key == "B")
             {
-                HealChoosed = true;
+                hero.Heal();
             }
             if (key == "F")
             {
-                LightningChoosed = true;
+                hero.LightningShot(hero, mob);
             }
+
         } // Воможность выбрать какое-либо действие
 
         public void Final(Hero hero, Entity mob, int lenght, int i)
