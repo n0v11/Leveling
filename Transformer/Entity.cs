@@ -114,19 +114,19 @@ namespace ConsoleMiniGame
 
     class Enemy1 : Mob
     {
-        public Enemy1() { Name = "Пуська"; Health = 60; DamageA = 5; DamageB = 10; }
+        public Enemy1() { Name = "Xiar"; Health = 60; DamageA = 5; DamageB = 10; }
     }
 
     class Enemy2 : Mob
     {
-        public Enemy2() { Name = "Сруська"; Health = 100; DamageA = 10; DamageB = 15; }
+        public Enemy2() { Name = "Munduru"; Health = 100; DamageA = 10; DamageB = 15; }
     }
 
     class Enemy3 : Mob
     {
         public Enemy3() : base()
         {
-            Name = "Финалька";
+            Name = "Lefmo";
             Health = 100;
             DamageA = 10;
             DamageB = 20;

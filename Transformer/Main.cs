@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ConsoleMiniGame
 {
@@ -10,6 +11,10 @@ namespace ConsoleMiniGame
     {
         static void Main(string[] args)
         {
+            int WinningCount = 0;
+            string path = @"X:\temp\MyTest.txt";
+            string read = File.ReadAllText(path);
+            Console.WriteLine("Количество побед подряд: {0}", read);
             Hero[] Heroes = HeroArray();
             Actions game = new Actions();
             Entity entity = new Entity();
@@ -35,7 +40,7 @@ namespace ConsoleMiniGame
                     }
                     game.Choose(hero, enemy); //Воможность выбора какого-либо действия
                 }
-                game.Final(hero, enemy, Enemies.Length, i); //Вывод результата боя
+                game.Final(hero, enemy, Enemies.Length, i, WinningCount, path); //Вывод результата боя
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ConsoleMiniGame
 {
@@ -97,7 +98,7 @@ namespace ConsoleMiniGame
 
         } // Воможность выбрать какое-либо действие
 
-        public void Final(Hero hero, Entity mob, int lenght, int i)
+        public void Final(Hero hero, Entity mob, int lenght, int i, int wins, string path)
         {
             if (mob.Health <= 0 && hero.Health > 0)
             {
@@ -106,6 +107,9 @@ namespace ConsoleMiniGame
                 if (i == lenght - 1)
                 {
                     Console.WriteLine("Ты победил. Могу перевести тебе монетку");
+                    wins++;
+                    File.WriteAllText(path, null);
+                    File.WriteAllText(path, Convert.ToString(wins));
                     Console.ReadKey();
                 }
             }
