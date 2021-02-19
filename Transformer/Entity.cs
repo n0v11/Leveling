@@ -28,9 +28,9 @@ namespace ConsoleMiniGame
                 return health;
             }
         }
-        public int DamageA;
-        public int DamageB;
-        public int Damage;
+        public int DamageA { get; set; }
+        public int DamageB { get; set; }
+        public int Damage { get; set; }
 
         public virtual void Stats()
         { } // Вывод статы после раунда 
@@ -40,9 +40,9 @@ namespace ConsoleMiniGame
 
     class Hero : Entity
     {
-        public string HeroClass;
-        public int Flask;
-        public int Lightnings;
+        public string HeroClass { get; set; }
+        public int Flask { get; set; }
+        public int Lightnings { get; set; }
 
         public override void Heal()
         {

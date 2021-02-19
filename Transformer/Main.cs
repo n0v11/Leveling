@@ -9,15 +9,10 @@ namespace ConsoleMiniGame
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            int WinningCount = 0;
-            string path = @"X:\temp\MyTest.txt";
-            string read = File.ReadAllText(path);
-            Console.WriteLine("Количество побед подряд: {0}", read);
             Hero[] Heroes = HeroArray();
             Actions game = new Actions();
-            Entity entity = new Entity();
             Hero hero = Heroes[game.ChooseHero(Heroes)]; // Выбор класса игрока
             Entity[] Enemies = EnemyArray(Others(hero, Heroes)); // Создание предателя и добавление его как финального босса к мобам
 
@@ -40,7 +35,7 @@ namespace ConsoleMiniGame
                     }
                     game.Choose(hero, enemy); //Воможность выбора какого-либо действия
                 }
-                game.Final(hero, enemy, Enemies.Length, i, WinningCount, path); //Вывод результата боя
+                game.Final(hero, enemy, Enemies.Length, i); //Вывод результата боя
             }
         }
 
@@ -78,7 +73,7 @@ namespace ConsoleMiniGame
         } // Создание предателя и добавление его как финального босса к мобам
     }
 }
-// To Do: настроить баланс мобам
-//Добавить босса +
-//Генерировать мобов для интереса
-//Сделать ng+ с переносом предметов
+// ToDo: Настроить баланс мобам
+// ToDo: Добавить босса +
+// ToDo: Генерация мобов
+// ToDo: ng+ с переносом предметов

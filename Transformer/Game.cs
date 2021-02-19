@@ -98,7 +98,7 @@ namespace ConsoleMiniGame
 
         } // Воможность выбрать какое-либо действие
 
-        public void Final(Hero hero, Entity mob, int lenght, int i, int wins, string path)
+        public void Final(Hero hero, Entity mob, int lenght, int i)
         {
             if (mob.Health <= 0 && hero.Health > 0)
             {
@@ -106,10 +106,7 @@ namespace ConsoleMiniGame
                 Console.ReadKey();
                 if (i == lenght - 1)
                 {
-                    Console.WriteLine("Ты победил. Могу перевести тебе монетку");
-                    wins++;
-                    File.WriteAllText(path, null);
-                    File.WriteAllText(path, Convert.ToString(wins));
+                    Console.WriteLine("Ты победил!");
                     Console.ReadKey();
                 }
             }
