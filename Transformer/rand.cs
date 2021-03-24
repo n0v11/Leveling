@@ -8,10 +8,10 @@ namespace ConsoleMiniGame
 {
     class Rand
     {
-        private static Random Rng = new Random();
+        private static Random Rnd = new Random();
         public static int damage(int a, int b) // Генерируем случайный урон в заданном диапазоне
         {
-            return Rng.Next(a, b);
+            return Rnd.Next(a, b);
         }
     }
 }

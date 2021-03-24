@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ConsoleMiniGame;
 
-namespace ConsoleMiniGame
+namespace Leveling
 {
     class Entity
     {
-        public string Name { get; set; }
+        public string name { get; set; }
         private int health;
         public int Health
         {
@@ -28,9 +25,9 @@ namespace ConsoleMiniGame
                 return health;
             }
         }
-        public int DamageA { get; set; }
-        public int DamageB { get; set; }
-        public int Damage { get; set; }
+        public int damageA { get; set; }
+        public int damageB { get; set; }
+        public int damage { get; set; }
 
         public delegate void MobStateChanger(Entity mob);
 
@@ -49,25 +46,25 @@ namespace ConsoleMiniGame
 
     class Hero : Entity
     {
-        public string HeroClass { get; set; }
-        public int Flask { get; set; }
-        public int Lightnings { get; set; }
+        public string heroClass { get; set; }
+        public int flask { get; set; }
+        public int lightnings { get; set; }
         public int decay { get; set; }
 
         public override void Heal()
         {
             
-            if (HeroClass != Name && Flask < 1)
+            if (heroClass != name && flask < 1)
             {
                 Console.WriteLine("\nЗелий больше нет!");
             }
             else
             {
-                if (Flask > 0)
+                if (flask > 0)
                 {
-                    Flask -= 1;
+                    flask -= 1;
                     Health += 50;
-                    Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", Name, Health);
+                    Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", name, Health);
                 }
                 else { }
             }
@@ -76,12 +73,11 @@ namespace ConsoleMiniGame
 
         public void LightningShot(Hero hero, Entity mob)
         {
-            if (hero.Lightnings > 0)
+            if (hero.lightnings > 0)
             {
-                int damage = Rand.damage(10, 20);
-                mob.Health -= damage;
-                hero.Lightnings--;
-                Console.WriteLine($"Здоровье {mob.Name} уменьшилось на {damage}. Текущее количество здоровья {mob.Name} {mob.Health}");
+                mob.Health -= Rand.damage(10, 20);
+                hero.lightnings--;
+                Console.WriteLine($"Здоровье {mob.name} уменьшилось на {damage}. Текущее количество здоровья {mob.name} {mob.Health}");
             }
             else
             {
@@ -116,51 +112,90 @@ namespace ConsoleMiniGame
 
         public override void Stats()
         {
-            Console.WriteLine("Герой {0}, Здоровье {1}, Зелий лечения {2}, Ударов Молнией {4}. Нанес урона {3}", Name, Health, Flask, Damage, Lightnings);
+            Console.WriteLine($"Герой {name}, Здоровье {Health}, Зелий лечения {flask}, Ударов Молнией {lightnings}. Нанес урона {damage}");
         } // Вывод статов после раунда 
     }
 
     class Warrior : Hero
     {
-        public Warrior() { Name = "Warrior"; HeroClass = "Warrior"; Health = 140; DamageA = 20; DamageB = 40; Flask = 3; Lightnings = 2; }
+        public Warrior()
+        {
+            name = "Warrior";
+            heroClass = "Warrior"; 
+            Health = 140; 
+            damageA = 20; 
+            damageB = 40; 
+            flask = 3; 
+            lightnings = 2;
+        }
     }
 
     class Rogue : Hero
     {
-        public Rogue() { Name = "Rogue"; HeroClass = "Rogue"; Health = 115; DamageA = 20; DamageB = 35; Flask = 2; Lightnings = 1; }
+        public Rogue()
+        {
+            name = "Rogue"; 
+            heroClass = "Rogue"; 
+            Health = 115; 
+            damageA = 20; 
+            damageB = 35; 
+            flask = 2; 
+            lightnings = 1;
+        }
     }
 
     class Mage : Hero
     {
-        public Mage() { Name = "Mage"; HeroClass = "Mage"; Health = 100; DamageA = 10; DamageB = 20; Flask = 1; Lightnings = 5; }
+        public Mage()
+        {
+            name = "Mage"; 
+            heroClass = "Mage"; 
+            Health = 100; 
+            damageA = 10;
+            damageB = 20; 
+            flask = 1; 
+            lightnings = 5;
+        }
     }
 
     class Mob : Entity
     {
         public override void Stats()
         {
-            Console.WriteLine("Враг {0}, Здоровье {1}, Нанес урона {2}", Name, Health, Damage);
+            Console.WriteLine($@"Враг {name}, Здоровье {Health}, Нанес урона {damage}");
         } // Вывод статов после раунда  
     }
 
     class Enemy1 : Mob
     {
-        public Enemy1() { Name = "Xiar"; Health = 60; DamageA = 5; DamageB = 10; }
+        public Enemy1()
+        {
+            name = "Xiar"; 
+            Health = 60;
+            damageA = 5;
+            damageB = 10;
+        }
     }
 
     class Enemy2 : Mob
     {
-        public Enemy2() { Name = "Munduru"; Health = 100; DamageA = 10; DamageB = 15; }
+        public Enemy2()
+        {
+            name = "Munduru"; 
+            Health = 100; 
+            damageA = 10; 
+            damageB = 15;
+        }
     }
 
     class Enemy3 : Mob
     {
         public Enemy3() : base()
         {
-            Name = "Lefmo";
+            name = "Lefmo";
             Health = 100;
-            DamageA = 10;
-            DamageB = 20;
+            damageA = 10;
+            damageB = 20;
         }
     }
 }

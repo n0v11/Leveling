@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Leveling;
 
 namespace ConsoleMiniGame
 {
@@ -14,18 +15,18 @@ namespace ConsoleMiniGame
             Console.WriteLine("Выберите класс своего персонажа\n");
             for (int i = 0; i < heroes.Length; i++)
             {
-                heroes[i].Damage = Rand.damage(heroes[i].DamageA, heroes[i].DamageB);
+                heroes[i].damage = Rand.damage(heroes[i].damageA, heroes[i].damageB);
                 Console.WriteLine(i + 1 + $": " +
-                                  $"Класс {heroes[i].HeroClass} - " +
+                                  $"Класс {heroes[i].heroClass} - " +
                                   $"Здоровье: {heroes[i].Health}, " +
-                                  $"Атака: {heroes[i].Damage}, " +
-                                  $"Зелий лечения: {heroes[i].Flask}, " +
+                                  $"Атака: {heroes[i].damage}, " +
+                                  $"Зелий лечения: {heroes[i].flask}, " +
                                   $"Отравлений: {heroes[i].decay}, " +
-                                  $"Усилений {heroes[i].Lightnings}\n");
+                                  $"Усилений {heroes[i].lightnings}\n");
             }
             int Choose = CheckHeroNumber(heroes);
             Console.Clear();
-            Console.WriteLine($"Вы выбрали {heroes[Choose].HeroClass}\n");
+            Console.WriteLine($"Вы выбрали {heroes[Choose].heroClass}\n");
             return Choose;
         } // Выбор класс игрока
 
@@ -52,13 +53,13 @@ namespace ConsoleMiniGame
             int i = 0;
             while (true)
             {
-                hero.Name = Console.ReadLine();
-                if (hero.Name == "" && i < 2 || hero.Name == hero.HeroClass)
+                hero.name = Console.ReadLine();
+                if (hero.name == "" && i < 2 || hero.name == hero.heroClass)
                 {
                     Console.WriteLine("Вы не ввели имя или ввели неправильное имя\nВведите имя");
                     i++;
                 }
-                else if (hero.Name == "" && i >= 2 && hero.Name == hero.HeroClass)
+                else if (hero.name == "" && i >= 2 && hero.name == hero.heroClass)
                 {
                     Console.WriteLine("Ты тупой? Введи имя!");
                 }
@@ -67,29 +68,29 @@ namespace ConsoleMiniGame
                     break;
                 }
             }
-            return hero.Name;
+            return hero.name;
         } // Проверка имени на условия
 
         public void Initial(Hero hero, Entity mob)
         {
             Console.Clear();
             Console.WriteLine($"" +
-                              $"Герой {hero.Name}, " +
+                              $"Герой {hero.name}, " +
                               $"Здоровье {hero.Health}, " +
-                              $"Зелий лечения {hero.Flask}, " +
-                              $"Ударов молнией {hero.Lightnings}, " +
+                              $"Зелий лечения {hero.flask}, " +
+                              $"Ударов молнией {hero.lightnings}, " +
                               $"Отравлений: {hero.decay}");
-            Console.WriteLine($"Враг {mob.Name}, Здоровье {mob.Health}");
+            Console.WriteLine($"Враг {mob.name}, Здоровье {mob.Health}");
             Actions.Action();
         } // Вывод статов персонажей 
 
         public void Fight(Hero hero, Entity mob) // Бой, проверерка необходимости использования действий
         {
             //Console.Clear();
-            hero.Damage = Rand.damage(hero.DamageA, hero.DamageB);
-            mob.Damage = Rand.damage(mob.DamageA, mob.DamageB);
-            hero.Health -= mob.Damage;
-            mob.Health -= hero.Damage;
+            hero.damage = Rand.damage(hero.damageA, hero.damageB);
+            mob.damage = Rand.damage(mob.damageA, mob.damageB);
+            hero.Health -= mob.damage;
+            mob.Health -= hero.damage;
         }
 
         public void Choose(Hero hero, Entity mob)
@@ -125,7 +126,7 @@ namespace ConsoleMiniGame
         {
             if (mob.Health <= 0 && hero.Health > 0)
             {
-                Console.WriteLine($"\nВ {i + 1} раунде победил {hero.Name}");
+                Console.WriteLine($"\nВ {i + 1} раунде победил {hero.name}");
                 Console.ReadKey();
                 if (i == lenght - 1)
                 {
@@ -135,7 +136,7 @@ namespace ConsoleMiniGame
             }
             else if (hero.Health <= 0 && mob.Health > 0)
             {
-                Console.WriteLine($"В {i + 1} раунде {hero.Name} проиграл");
+                Console.WriteLine($"В {i + 1} раунде {hero.name} проиграл");
                 Console.ReadKey();
             }
             else if (hero.Health <= 0 && mob.Health <= 0)

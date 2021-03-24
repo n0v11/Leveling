@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Leveling;
 
 namespace ConsoleMiniGame
 {
@@ -62,7 +63,7 @@ namespace ConsoleMiniGame
             int count = 0;
             for (int i = 0; i < all.Length; i++)
             {
-                if (all[i].HeroClass != hero.HeroClass)
+                if (all[i].heroClass != hero.heroClass)
                 {
                     others[count] = all[i];
                     count++;
