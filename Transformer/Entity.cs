@@ -32,6 +32,15 @@ namespace ConsoleMiniGame
         public int DamageB { get; set; }
         public int Damage { get; set; }
 
+        public delegate void MobStateChanger(Entity mob);
+
+        public MobStateChanger mobStateChanger;
+
+        public void EndOfMove()
+        {
+            mobStateChanger?.Invoke(this);
+        }
+
         public virtual void Stats()
         { } // Вывод статы после раунда 
 
@@ -43,6 +52,7 @@ namespace ConsoleMiniGame
         public string HeroClass { get; set; }
         public int Flask { get; set; }
         public int Lightnings { get; set; }
+        public int decay { get; set; }
 
         public override void Heal()
         {
@@ -50,7 +60,6 @@ namespace ConsoleMiniGame
             if (HeroClass != Name && Flask < 1)
             {
                 Console.WriteLine("\nЗелий больше нет!");
-                Actions.Action();
             }
             else
             {
@@ -59,7 +68,6 @@ namespace ConsoleMiniGame
                     Flask -= 1;
                     Health += 50;
                     Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", Name, Health);
-                    Actions.Action();
                 }
                 else { }
             }
@@ -73,15 +81,38 @@ namespace ConsoleMiniGame
                 int damage = Rand.damage(10, 20);
                 mob.Health -= damage;
                 hero.Lightnings--;
-                Console.WriteLine("Здоровье {0} уменьшилось на {1}. Текущее количество здоровья {0} {2}", mob.Name, damage, mob.Health);
-                Actions.Action();
+                Console.WriteLine($"Здоровье {mob.Name} уменьшилось на {damage}. Текущее количество здоровья {mob.Name} {mob.Health}");
             }
             else
             {
                 Console.WriteLine("Молний больше нет!");
-                Actions.Action();
             }
         } // Удар молнией
+
+        public void ApplyDecayOnTarget(Hero hero, Entity mob)
+        {
+            MobStateChanger a = new (Decay);
+            mob.mobStateChanger += a;
+            hero.decay--;
+            Console.WriteLine("На противника наложено гниение, он будет терять по несколько хп каждый ход");
+        }
+
+        private void Decay(Entity mob)
+        {
+            if (turns > 0)
+            {
+                int damage = Rand.damage(5, 11);
+                mob.Health -= damage;
+                Console.WriteLine($"Противник теряет {damage} хп");
+                Console.WriteLine($"Гниение продлится еще {turns} ходов");
+                turns--;
+                Actions.Action();
+            }
+            else
+            {
+                Console.WriteLine("Гниение больше не действует");
+            }
+        }
 
         public override void Stats()
         {
