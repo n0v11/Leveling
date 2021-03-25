@@ -6,36 +6,36 @@ namespace Leveling
     class Entity
     {
         public string name { get; set; }
-        private int health;
-        public int Health
+        private int _health;
+        public int health
         {
             set
             {
                 if (value < 0)
                 {
-                    health = 0;
+                    _health = 0;
                 }
                 else
                 {
-                    health = value;
+                    _health = value;
                 }
             }
             get
             {
-                return health;
+                return _health;
             }
         }
         public int damageA { get; set; }
         public int damageB { get; set; }
         public int damage { get; set; }
 
-        public delegate void MobStateChanger(Entity mob);
+        public delegate void MobStateChanger();
 
         public MobStateChanger mobStateChanger;
 
         public void EndOfMove()
         {
-            mobStateChanger?.Invoke(this);
+            mobStateChanger?.Invoke();
         }
 
         public virtual void Stats()
@@ -63,8 +63,8 @@ namespace Leveling
                 if (flask > 0)
                 {
                     flask -= 1;
-                    Health += 50;
-                    Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", name, Health);
+                    health += 50;
+                    Console.WriteLine("\n{0} применяет зелье лечения и здоровье увеличилось на 50. Текущее количество здоровья {1}", name, health);
                 }
                 else { }
             }
@@ -75,9 +75,9 @@ namespace Leveling
         {
             if (hero.lightnings > 0)
             {
-                mob.Health -= Rand.damage(10, 20);
+                mob.health -= Rand.damage(10, 20);
                 hero.lightnings--;
-                Console.WriteLine($"Здоровье {mob.name} уменьшилось на {damage}. Текущее количество здоровья {mob.name} {mob.Health}");
+                Console.WriteLine($"Здоровье {mob.name} уменьшилось на {damage}. Текущее количество здоровья {mob.name} {mob.health}");
             }
             else
             {
@@ -87,32 +87,44 @@ namespace Leveling
 
         public void ApplyDecayOnTarget(Hero hero, Entity mob)
         {
-            MobStateChanger a = new (Decay);
-            mob.mobStateChanger += a;
-            hero.decay--;
-            Console.WriteLine("На противника наложено гниение, он будет терять по несколько хп каждый ход");
-        }
-
-        private void Decay(Entity mob)
-        {
-            if (turns > 0)
+            int turn = 2;
+            MobStateChanger decayEffect = null;
+            if (hero.decay > 0)
             {
-                int damage = Rand.damage(5, 11);
-                mob.Health -= damage;
-                Console.WriteLine($"Противник теряет {damage} хп");
-                Console.WriteLine($"Гниение продлится еще {turns} ходов");
-                turns--;
-                Actions.Action();
+                Console.WriteLine("На противника наложено гниение, он будет терять по несколько хп каждый ход");
+                decayEffect = () =>
+                {
+                    if (turn-- > 0)
+                    {
+                        Decay(mob, turn);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Гниение больше не действует");
+                        mob.mobStateChanger -= decayEffect;
+                        Actions.Action();
+                    }
+                };
+                hero.decay--;
+                mob.mobStateChanger += decayEffect;
             }
             else
             {
-                Console.WriteLine("Гниение больше не действует");
+                Console.WriteLine("Гниений больше нет");
             }
-        }
+        } // Наложение гниения
+
+        private void Decay(Entity mob, int turn)
+        {
+            mob.health -= Rand.damage(5, 11); ;
+            Console.WriteLine($"Противник теряет {damage} хп");
+            Console.WriteLine($"Гниение продлится еще {turn} раз");
+            Actions.Action();
+        }  // Отравление
 
         public override void Stats()
         {
-            Console.WriteLine($"Герой {name}, Здоровье {Health}, Зелий лечения {flask}, Ударов Молнией {lightnings}. Нанес урона {damage}");
+            Console.WriteLine($"Герой {name}, Здоровье {health}, Зелий лечения {flask}, Ударов Молнией {lightnings}, Отравлений {decay}, Нанес урона {damage}");
         } // Вывод статов после раунда 
     }
 
@@ -122,11 +134,12 @@ namespace Leveling
         {
             name = "Warrior";
             heroClass = "Warrior"; 
-            Health = 140; 
-            damageA = 20; 
-            damageB = 40; 
+            health = 150; 
+            damageA = 8; 
+            damageB = 14; 
             flask = 3; 
             lightnings = 2;
+            decay = 1;
         }
     }
 
@@ -136,11 +149,12 @@ namespace Leveling
         {
             name = "Rogue"; 
             heroClass = "Rogue"; 
-            Health = 115; 
-            damageA = 20; 
-            damageB = 35; 
+            health = 115; 
+            damageA = 6; 
+            damageB = 15; 
             flask = 2; 
             lightnings = 1;
+            decay = 3;
         }
     }
 
@@ -150,11 +164,12 @@ namespace Leveling
         {
             name = "Mage"; 
             heroClass = "Mage"; 
-            Health = 100; 
-            damageA = 10;
-            damageB = 20; 
+            health = 100; 
+            damageA = 5;
+            damageB = 10; 
             flask = 1; 
             lightnings = 5;
+            decay = 0;
         }
     }
 
@@ -162,7 +177,7 @@ namespace Leveling
     {
         public override void Stats()
         {
-            Console.WriteLine($@"Враг {name}, Здоровье {Health}, Нанес урона {damage}");
+            Console.WriteLine($@"Враг {name}, Здоровье {health}, Нанес урона {damage}");
         } // Вывод статов после раунда  
     }
 
@@ -171,9 +186,9 @@ namespace Leveling
         public Enemy1()
         {
             name = "Xiar"; 
-            Health = 60;
+            health = 60;
             damageA = 5;
-            damageB = 10;
+            damageB = 8;
         }
     }
 
@@ -182,9 +197,9 @@ namespace Leveling
         public Enemy2()
         {
             name = "Munduru"; 
-            Health = 100; 
-            damageA = 10; 
-            damageB = 15;
+            health = 100; 
+            damageA = 6; 
+            damageB = 12;
         }
     }
 
@@ -193,9 +208,9 @@ namespace Leveling
         public Enemy3() : base()
         {
             name = "Lefmo";
-            Health = 100;
-            damageA = 10;
-            damageB = 20;
+            health = 100;
+            damageA = 8;
+            damageB = 14;
         }
     }
 }

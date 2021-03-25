@@ -18,7 +18,7 @@ namespace ConsoleMiniGame
                 heroes[i].damage = Rand.damage(heroes[i].damageA, heroes[i].damageB);
                 Console.WriteLine(i + 1 + $": " +
                                   $"Класс {heroes[i].heroClass} - " +
-                                  $"Здоровье: {heroes[i].Health}, " +
+                                  $"Здоровье: {heroes[i].health}, " +
                                   $"Атака: {heroes[i].damage}, " +
                                   $"Зелий лечения: {heroes[i].flask}, " +
                                   $"Отравлений: {heroes[i].decay}, " +
@@ -76,11 +76,11 @@ namespace ConsoleMiniGame
             Console.Clear();
             Console.WriteLine($"" +
                               $"Герой {hero.name}, " +
-                              $"Здоровье {hero.Health}, " +
+                              $"Здоровье {hero.health}, " +
                               $"Зелий лечения {hero.flask}, " +
                               $"Ударов молнией {hero.lightnings}, " +
                               $"Отравлений: {hero.decay}");
-            Console.WriteLine($"Враг {mob.name}, Здоровье {mob.Health}");
+            Console.WriteLine($"Враг {mob.name}, Здоровье {mob.health}");
             Actions.Action();
         } // Вывод статов персонажей 
 
@@ -89,8 +89,8 @@ namespace ConsoleMiniGame
             //Console.Clear();
             hero.damage = Rand.damage(hero.damageA, hero.damageB);
             mob.damage = Rand.damage(mob.damageA, mob.damageB);
-            hero.Health -= mob.damage;
-            mob.Health -= hero.damage;
+            hero.health -= mob.damage;
+            mob.health -= hero.damage;
         }
 
         public void Choose(Hero hero, Entity mob)
@@ -120,11 +120,13 @@ namespace ConsoleMiniGame
                         break;
                 }
             }
+
+            mob.EndOfMove();
         } // Воможность выбрать какое-либо действие
 
         public void Final(Hero hero, Entity mob, int lenght, int i)
         {
-            if (mob.Health <= 0 && hero.Health > 0)
+            if (mob.health <= 0 && hero.health > 0)
             {
                 Console.WriteLine($"\nВ {i + 1} раунде победил {hero.name}");
                 Console.ReadKey();
@@ -134,12 +136,12 @@ namespace ConsoleMiniGame
                     Console.ReadKey();
                 }
             }
-            else if (hero.Health <= 0 && mob.Health > 0)
+            else if (hero.health <= 0 && mob.health > 0)
             {
                 Console.WriteLine($"В {i + 1} раунде {hero.name} проиграл");
                 Console.ReadKey();
             }
-            else if (hero.Health <= 0 && mob.Health <= 0)
+            else if (hero.health <= 0 && mob.health <= 0)
             {
                 Console.WriteLine("Убил врага и умер сам!");
                 Console.ReadKey();
@@ -160,11 +162,11 @@ namespace ConsoleMiniGame
         public void EnemyAi(Entity enemy)
         {
             int chance = Rand.damage(0, 10);
-            if (enemy.Health <= 70 && enemy.Health > 30 && chance < 3
+            if (enemy.health <= 70 && enemy.health > 30 && chance < 3
                 ||
-                enemy.Health <= 30 && enemy.Health > 10 && chance < 7
+                enemy.health <= 30 && enemy.health > 10 && chance < 7
                 ||
-                enemy.Health <= 10 && enemy.Health > 0)
+                enemy.health <= 10 && enemy.health > 0)
             {
                 enemy.Heal();
             }

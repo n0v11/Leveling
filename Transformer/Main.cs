@@ -23,7 +23,7 @@ namespace ConsoleMiniGame
             {
                 Entity enemy = Enemies[i]; // Запуск мобов по кругу
                 game.Initial(hero, enemy); // Вывод статов персонажей 
-                while (hero.Health > 0 && enemy.Health > 0)
+                while (hero.health > 0 && enemy.health > 0)
                 {
                     game.Fight(hero, enemy); // Этап раунда
                     Console.Clear();
